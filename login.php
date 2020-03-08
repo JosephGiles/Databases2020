@@ -73,6 +73,7 @@
 <!DOCTYPE html>
 <html>
 
+<!--
 <h1>--------------------------Joseph's Test login---------------------------------</h1>
 <form action = "" method = "post">
                   <label>UserName  :</label><input type = "text" name = "username" class = "box"/><br /><br />
@@ -81,7 +82,7 @@
 </form>
 <li><a href="createAccount.php">Create Account</a></li>
 <h1>--------------------------Joseph's Test login---------------------------------</h1>
-
+-->
 <head>
   <link rel="stylesheet" href="cookEatInStyle.css">
 </head>
