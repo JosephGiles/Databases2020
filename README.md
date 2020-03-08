@@ -1,2 +1,2 @@
 # Databases2020
-BYU Databases class- Web pages
+BYU Databases 2020. JOseph, Paul, Hyrum. The class webpages.
