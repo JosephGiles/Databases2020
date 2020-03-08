@@ -20,9 +20,10 @@
 
 <!-- navbar -->
 <ul class="navbar">
-  <li><a href="cookEatInMain.html">Home</a></li>
+  <li><a href="main.php">Home</a></li>
   <li><a href="#"></a></li>
   <li><a class="activePage" href="findFood.php">Find Food</a></li>
+  <li><a class="activePage" href="cart.php">Cart</a></li>
   <?php
 	if($_SESSION['loggedin'] == true)
 	{	
@@ -37,9 +38,61 @@
 	?>
 </ul>
 
+<h1>Order</h1>
+<form action="" method="post">
+<label>Food ID: </label>
+<input type="text" name="foodID">
+<input type="hidden" name="addaction">
+<button type="submit">Add to cart </button>
+</form>
+
+
+<?php
+if(!$_POST) 
+	{
+		echo "SUPER ERROR!";
+	}
+	else if (isset($_POST['addaction']))
+	{
+		//echo $_POST['foodID'];
+		$findFoodID = $_POST['foodID'];
+		$sqlGet = "Select Name, Price, FoodItemID from FoodItemsTable where FoodItemID = '$findFoodID'";
+		$result = mysqli_query($db,$sqlGet);
+
+		if($result->num_rows == 1)
+		{
+			while($row = $result->fetch_assoc())
+			{
+				//echo "WOOOT";
+				//echo $row['Name'];
+				$insertPrice = $row['Price'];
+				//echo $insertPrice;
+				$insertName = $row['Name'];
+				//echo $insertName;
+				$insertID = $_SESSION['userID'];
+				//echo $insertID;
+				$insertFoodID = $row['FoodItemID'];
+				//echo $insertFoodID;
+				$sqlInsert = "insert into OrdersTable (UserID, FoodItemID, Name, Price) values ('$insertID', '$insertFoodID', '$insertName', '$insertPrice') ";
+
+				$result7 = mysqli_query($db,$sqlInsert);
+				echo $insertName. " (" . $insertPrice . ") " . "added to cart";
+			}
+		//$sqlInsert = "insert into OrdersTable "
+		}
+		else
+		{
+			echo "Food ID doesn't exist";
+		}
+		
+	}
+
+?>
+
+<h1>Search Dishes</h1>
 
 <!-- MAIN PAGE -->
-
+<!--
 <br>
 <form id="filterform" style="text-align:center">
   <label for="fsearch">Find food:</label>
@@ -47,7 +100,7 @@
   <p>Show Filter</p> 
 	<button onclick="myFunction()">Show/Hide</button>
 </form>
-
+-->
 <script>
 function myFunction() {
   var x = document.getElementById("filterform");
@@ -59,7 +112,7 @@ function myFunction() {
 }
 </script>
 
-
+<!--
 <?php
 	if($_SERVER["REQUEST_METHOD"] == "POST") 
 	{
@@ -70,8 +123,9 @@ function myFunction() {
 		//$distance = mysqli_real_escape_string($db,$_POST['distance']);
 		$price = mysqli_real_escape_string($db,$_POST['price']);
 		$calorie = mysqli_real_escape_string($db,$_POST['calorie']);
+		$chef = mysqli_real_escape_string($db,$_POST['chef']);
 		
-		$sql = "select * from FoodItemsTable where ";
+		$sql = "select * from FoodItemsTable inner join UsersTable on FoodItemsTable.UserID = UsersTable.UserID where ";
 		$bool = false;
 
 		if($cuisine != null)
@@ -146,6 +200,19 @@ function myFunction() {
 			}
 		}
 
+		if($chef != null)
+		{
+			if($bool == false)
+			{
+				$sql = $sql . "Email = '$chef'";
+				$bool = true;
+			}
+			else
+			{
+				$sql = $sql . " and Email <= '$chef'";
+			}
+		}
+
 
 
 		echo $sql."<br>";
@@ -157,7 +224,7 @@ function myFunction() {
 		{
 			while($row = $result->fetch_assoc())
 			{
-				echo "NAME: ".$row["Name"]." | COOK TIME: ".$row["CookTime"]." | CALORIES: " .$row["Calories"]." | PRICE: $" . $row["Price"].  " | Rating: ".$row['AverageRatings']." | NUMBER OF REVIEWS: ".$row['NumberOfReviews']." CHEF EMAIL: ".$row['UserID']."<br>";
+				echo "NAME: ".$row["Name"]." | FOOD ID: ".$row['FoodItemID']." | COOK TIME: ".$row["CookTime"]." | CALORIES: " .$row["Calories"]." | PRICE: $" . $row["Price"].  " | Rating: ".$row['AverageRatings']." | NUMBER OF REVIEWS: ".$row['NumberOfReviews']." | CHEF EMAIL: ".$row['Email']."<br>";
 			}
 		}
 		else
@@ -167,9 +234,133 @@ function myFunction() {
 		
 	}
 ?>
+-->
+
+<?php
+	if(!$_POST) 
+	{
+		echo "SUPER ERROR!";
+	}
+	else if (isset($_POST['searchaction']))
+	{
+		$cuisine = mysqli_real_escape_string($db,$_POST['cuisine']);
+		$cookTime = mysqli_real_escape_string($db,$_POST['cookTime']);
+		$rating = mysqli_real_escape_string($db,$_POST['starCount']);
+		$reviewCount = mysqli_real_escape_string($db,$_POST['reviewCount']);
+		//$distance = mysqli_real_escape_string($db,$_POST['distance']);
+		$price = mysqli_real_escape_string($db,$_POST['price']);
+		$calorie = mysqli_real_escape_string($db,$_POST['calorie']);
+		$chef = mysqli_real_escape_string($db,$_POST['chef']);
+		
+		$sql = "select * from FoodItemsTable inner join UsersTable on FoodItemsTable.UserID = UsersTable.UserID where ";
+		$bool = false;
+
+		if($cuisine != null)
+		{
+			$sql = $sql . "Name = '$cuisine'";
+			$bool = true;
+			//echo "ACCIDENT";
+		}
+		
+		if($cookTime != null)
+		{
+			if($bool == false)
+			{
+				$sql = $sql . "CookTime <= '$cookTime'";
+				$bool = true;
+			}
+			else
+			{
+				$sql = $sql . " and CookTime <= '$cookTime'";
+			}
+		}
+
+		if($rating != null)
+		{
+			if($bool == false)
+			{
+				$sql = $sql . "AverageRatings >= '$rating'";
+				$bool = true;
+			}
+			else
+			{
+				$sql = $sql . " and AverageRatings >= '$rating'";
+			}
+		}
+
+		if($reviewCount != null)
+		{
+			if($bool == false)
+			{
+				$sql = $sql . "NumberOfReviews >= '$reviewCount'";
+				$bool = true;
+			}
+			else
+			{
+				$sql = $sql . " and NumberOfReviews >= '$reviewCount'";
+			}
+		}
+
+		if($price != null)
+		{
+			if($bool == false)
+			{
+				$sql = $sql . "Price <= '$price'";
+				$bool = true;
+			}
+			else
+			{
+				$sql = $sql . " and Price >= '$price'";
+			}
+		}
+
+		if($calorie != null)
+		{
+			if($bool == false)
+			{
+				$sql = $sql . "Calories <= '$calorie'";
+				$bool = true;
+			}
+			else
+			{
+				$sql = $sql . " and Calories <= '$calorie'";
+			}
+		}
+
+		if($chef != null)
+		{
+			if($bool == false)
+			{
+				$sql = $sql . "Email = '$chef'";
+				$bool = true;
+			}
+			else
+			{
+				$sql = $sql . " and Email <= '$chef'";
+			}
+		}
 
 
 
+		echo $sql."<br>";
+		//$sql = "select * from FoodItemsTable where CookTime <= '$cookTime'";
+		//echo "<br>" .$sql;
+		//$result = $conn->query($sql);
+		$result = mysqli_query($db,$sql);
+		if($result->num_rows > 0)
+		{
+			while($row = $result->fetch_assoc())
+			{
+				echo "NAME: ".$row["Name"]." | FOOD ID: ".$row['FoodItemID']." | COOK TIME: ".$row["CookTime"]." | CALORIES: " .$row["Calories"]." | PRICE: $" . $row["Price"].  " | Rating: ".$row['AverageRatings']." | NUMBER OF REVIEWS: ".$row['NumberOfReviews']." | CHEF EMAIL: ".$row['Email']."<br>";
+			}
+		}
+		else
+		{
+			echo "0 results";
+		}
+		
+	}
+?>
 
 
 <!-- site description -->
@@ -196,7 +387,11 @@ function myFunction() {
   
   <label for="calorie">Max calorie count:</label><br>
   <input type="text" id="calorie" name="calorie"><br><br>
+
+  <label for="chef">Chef's Email:</label><br>
+  <input type="text" id="chef" name="chef"><br><br>
  
+	<input type="hidden" name="searchaction">
 	<button class="normal hover" type = "submit"> Search </button>
 </form>
 </div>
@@ -204,11 +399,11 @@ function myFunction() {
 
 
 <br>
-<!-- find food button -->
+<!-- find food button
 <div style="text-align:center">
 <button class="normal hover" onclick=""> Find Food </button>
 </div>
-
+-->
 
 
 </body>

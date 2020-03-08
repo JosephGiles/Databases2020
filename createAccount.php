@@ -34,7 +34,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	        $sql3 = "INSERT INTO UsersTable (Email, Password, PhoneNumber, StreetAddress, City, ZIPCode, State, LoggedIn, IsChef, FirstName, Lastname) Values ('$myemail', '$mypassword', '$myphone', '$mystreet', '$mycity', '$myzip', '$mystate', '0', '$mychef', '$myfirst', '$mylast')";
 
       		$result3 = mysqli_query($db,$sql3);	
-		//header("location: login.php");
+		header("location: login.php");
 
 
 
