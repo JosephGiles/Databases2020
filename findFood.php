@@ -396,9 +396,86 @@ function myFunction() {
 </form>
 </div>
 
+<br>
 
+<h1>See Reviews</h1>
+
+<?php
+	if (isset($_POST['searchReviewAction']))
+	{
+		//echo "REVIEW";
+		$foodID = $_POST['reviewFoodID'];
+		//echo $foodID;
+		$sqlReview = "Select * from ReviewsTable inner join UsersTable on ReviewsTable.PostedByUserID = UsersTable.UserID";
+
+		$result = mysqli_query($db,$sqlReview);
+		if($result->num_rows > 0)
+		{
+			while($row = $result->fetch_assoc())
+			{
+				echo $row['Rating'] . "/5  " . $row['Review'] . " -  " . $row['FirstName']. " " . $row['LastName'] . "<br>";
+			}
+		}
+	}
+
+?>
+
+<form style="text-align:center" action="" method="post">
+  <label for="cuisine">Search Review by Food ID:</label><br>
+  <input type="text" id="cuisine" name="reviewFoodID"><br><br>
+
+<!--
+  <label for="chef">Search Review by Chef's Email:</label><br>
+  <input type="text" id="chef" name="reviewChef"><br><br>
+-->
+	<input type="hidden" name="searchReviewAction">
+	<button class="normal hover" type = "submit"> Search </button>
+</form>
 
 <br>
+
+<h1>Add a Review</h1>
+
+<?php
+	if (isset($_POST['addReviewAction']))
+	{
+		//echo "REVIEW";
+		$foodID = $_POST['foodID'];
+		$rating = $_POST['rating'];
+		$review = $_POST['review'];
+		$id = $_SESSION['userID'];
+
+		$sqlAdd = "insert into ReviewsTable (FoodItemID, Review, Rating, PostedByUserID) values ('$foodID', '$review', '$rating', '$id')";
+
+		$result = mysqli_query($db,$sqlAdd);
+		echo "Review added!";
+		
+	}
+
+?>
+
+
+
+
+<form style="text-align:center" action="" method="post">
+  <label for="cuisine">Food ID:</label><br>
+  <input type="text" id="cuisine" name="foodID"><br><br>
+
+  <label for="cuisine">Rating out of 5 (ex. 3):</label><br>
+  <input type="text" id="cuisine" name="rating"><br><br>
+
+  <label for="chef">Write Review:</label><br>
+  <input type="text" id="chef" name="review"><br><br>
+
+	<input type="hidden" name="addReviewAction">
+	<button class="normal hover" type = "submit"> Search </button>
+</form>
+
+
+
+
+
+
 <!-- find food button
 <div style="text-align:center">
 <button class="normal hover" onclick=""> Find Food </button>
