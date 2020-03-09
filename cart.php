@@ -21,7 +21,20 @@
   <li><a href="main.php">Home</a></li>
   <li><a href="#"></a></li>
   <li><a href="findFood.php">Find Food</a></li>
-  <li style="float:right"><a class="activePage" href="#">Login/Create Account</a></li>
+  <li><a href="cart.php">Cart</a></li>
+  <li><a href="mykitchen.php">My Kitchen</a></li>
+  <?php
+	if($_SESSION['loggedin'] == true)
+	{	
+		
+  		echo "<li style="."float:right"."><a href="."logout.php".">Logout</a></li>";
+
+	}	
+	else
+	{
+		echo "<li style="."float:right"."><a href="."login.php".">Login</a></li>";
+	}
+	?>
 </ul>
 
 
@@ -53,8 +66,8 @@
 		$tax = round($tax, 2);
 		echo "<br>";
 		echo "<br>";
-		echo "Taxes: " . $tax . "<br>";	
-		echo "Total: " . ($total + $tax). "<br>";
+		echo "Taxes: $" . $tax . "<br>";	
+		echo "Total: $" . ($total + $tax). "<br>";
 	}
 
 ?>

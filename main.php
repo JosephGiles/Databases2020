@@ -28,7 +28,7 @@
   <li><a class="activePage" href="main.php">Home</a></li>
   <li><a href="#"></a></li>
   <li><a href="findFood.php">Find Food</a></li>
-  <li><a href="foodItem.php">Order</a></li>
+  <li><a href="cart.php">Cart</a></li>
   <li><a href="mykitchen.php">My Kitchen</a></li>
 	<?php
 	if($_SESSION['loggedin'] == true)

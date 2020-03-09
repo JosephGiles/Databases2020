@@ -24,6 +24,7 @@
   <li><a href="#"></a></li>
   <li><a class="activePage" href="findFood.php">Find Food</a></li>
   <li><a class="activePage" href="cart.php">Cart</a></li>
+  <li><a href="mykitchen.php">My Kitchen</a></li>
   <?php
 	if($_SESSION['loggedin'] == true)
 	{	
@@ -406,7 +407,7 @@ function myFunction() {
 		//echo "REVIEW";
 		$foodID = $_POST['reviewFoodID'];
 		//echo $foodID;
-		$sqlReview = "Select * from ReviewsTable inner join UsersTable on ReviewsTable.PostedByUserID = UsersTable.UserID";
+		$sqlReview = "Select * from ReviewsTable inner join UsersTable on ReviewsTable.PostedByUserID = UsersTable.UserID where FoodItemID = '$foodID'";
 
 		$result = mysqli_query($db,$sqlReview);
 		if($result->num_rows > 0)
@@ -468,7 +469,7 @@ function myFunction() {
   <input type="text" id="chef" name="review"><br><br>
 
 	<input type="hidden" name="addReviewAction">
-	<button class="normal hover" type = "submit"> Search </button>
+	<button class="normal hover" type = "submit"> Add Review </button>
 </form>
 
 
