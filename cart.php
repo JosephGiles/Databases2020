@@ -18,7 +18,7 @@
 
 <!-- navbar -->
 <ul class="navbar">
-  <li><a href="#">Home</a></li>
+  <li><a href="main.php">Home</a></li>
   <li><a href="#"></a></li>
   <li><a href="findFood.php">Find Food</a></li>
   <li style="float:right"><a class="activePage" href="#">Login/Create Account</a></li>
@@ -94,6 +94,10 @@
 		$insertSQL = "insert into PaymentMethodTable (CardNumber, ExpirationMonth, ExpirationYear, SecurityCode, UserID) values ('$card', '$month', '$year', '$code', '$id')";
 		$result12 = mysqli_query($db,$insertSQL);
 		echo "Payment submitted";
+
+		$id = $_SESSION['userID'];
+		$sql9 = "delete from OrdersTable where UserID = '$id' ";
+		$result = mysqli_query($db,$sql9);
 				
 	}
 

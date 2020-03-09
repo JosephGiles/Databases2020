@@ -21,7 +21,7 @@
 	<ul class="navbar">
 	  <li><a class="activePage" href="main.php">Home</a></li>
 	  <li><a href="#"></a></li>
-	  <li><a href="findFood.html">Find Food</a></li>
+	  <li><a href="findFood.php">Find Food</a></li>
 	  <li><a href="mykitchen.php">My Kitchen</a></li>
 	  <?php
 	if($_SESSION['loggedin'] == true)
