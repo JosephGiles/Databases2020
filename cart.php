@@ -51,7 +51,7 @@
 	$total = 0;
 	$taxRate = 0.1;
 	$id = $_SESSION['userID'];
-	$sql9 = "select * from OrdersTable where UserID = '$id' ";
+	$sql9 = "select * from OrdersTable where UserID = '$id' AND Submitted = 0 ";
 	$result = mysqli_query($db,$sql9);
 	if($result->num_rows > 0)
 	{
@@ -66,8 +66,12 @@
 		$tax = round($tax, 2);
 		echo "<br>";
 		echo "<br>";
-		echo "Taxes: $" . $tax . "<br>";	
-		echo "Total: $" . ($total + $tax). "<br>";
+		echo "Taxes: $" . number_format((float)$tax, 2, '.', '') . "<br>";	
+		echo "Total: $" . number_format((float)($total + $tax), 2, '.', ''). "<br>";
+	}
+	else
+	{
+
 	}
 
 ?>
@@ -85,11 +89,12 @@
 <?php
 	if(!$_POST) 
 	{
-		echo "SUPER ERROR!";
+		//echo "SUPER ERROR!";
 	}
 	else if (isset($_POST['removeAction']))
 	{
 		$deleteItem = $_POST['itemNumber'];
+		$deleteItem = mysqli_real_escape_string($db,$deleteItem);
 		$deleteUserID = $_SESSION['userID'];
 		//echo $deleteItem;
 		$sqlRemove = "delete from OrdersTable where OrderID = '$deleteItem' and UserID = '$deleteUserID' ";
@@ -104,12 +109,22 @@
 		$code = $_POST['secCode'];
 		$id = $_SESSION['userID'];
 		
+
+		
+
+
+
+
+
+
+
 		$insertSQL = "insert into PaymentMethodTable (CardNumber, ExpirationMonth, ExpirationYear, SecurityCode, UserID) values ('$card', '$month', '$year', '$code', '$id')";
 		$result12 = mysqli_query($db,$insertSQL);
 		echo "Payment submitted";
 
 		$id = $_SESSION['userID'];
-		$sql9 = "delete from OrdersTable where UserID = '$id' ";
+		//$sql9 = "delete from OrdersTable where UserID = '$id' ";
+		$sql9 = "update OrdersTable set Submitted = 1 where UserID = '$id' ";
 		$result = mysqli_query($db,$sql9);
 				
 	}

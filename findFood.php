@@ -51,12 +51,13 @@
 <?php
 if(!$_POST) 
 	{
-		echo "SUPER ERROR!";
+		//echo "SUPER ERROR!";
 	}
 	else if (isset($_POST['addaction']))
 	{
 		//echo $_POST['foodID'];
 		$findFoodID = $_POST['foodID'];
+		$findFoodID = mysqli_real_escape_string($db,$findFoodID);
 		$sqlGet = "Select Name, Price, FoodItemID from FoodItemsTable where FoodItemID = '$findFoodID'";
 		$result = mysqli_query($db,$sqlGet);
 
@@ -240,7 +241,7 @@ function myFunction() {
 <?php
 	if(!$_POST) 
 	{
-		echo "SUPER ERROR!";
+		//echo "SUPER ERROR!";
 	}
 	else if (isset($_POST['searchaction']))
 	{
@@ -253,7 +254,7 @@ function myFunction() {
 		$calorie = mysqli_real_escape_string($db,$_POST['calorie']);
 		$chef = mysqli_real_escape_string($db,$_POST['chef']);
 		
-		$sql = "select * from FoodItemsTable inner join UsersTable on FoodItemsTable.UserID = UsersTable.UserID where ";
+		$sql = "select * from FoodItemsTable inner join UsersTable on FoodItemsTable.ChefID = UsersTable.UserID where ";
 		$bool = false;
 
 		if($cuisine != null)
@@ -343,7 +344,7 @@ function myFunction() {
 
 
 
-		echo $sql."<br>";
+		//echo $sql."<br>";
 		//$sql = "select * from FoodItemsTable where CookTime <= '$cookTime'";
 		//echo "<br>" .$sql;
 		//$result = $conn->query($sql);
@@ -406,6 +407,7 @@ function myFunction() {
 	{
 		//echo "REVIEW";
 		$foodID = $_POST['reviewFoodID'];
+		$foodID = mysqli_real_escape_string($db,$foodID);
 		//echo $foodID;
 		$sqlReview = "Select * from ReviewsTable inner join UsersTable on ReviewsTable.PostedByUserID = UsersTable.UserID where FoodItemID = '$foodID'";
 
@@ -445,7 +447,13 @@ function myFunction() {
 		$rating = $_POST['rating'];
 		$review = $_POST['review'];
 		$id = $_SESSION['userID'];
-
+		
+		$foodID = mysqli_real_escape_string($db,$foodID);
+		$rating = mysqli_real_escape_string($db,$rating);
+		$review = mysqli_real_escape_string($db,$review);
+		$id = mysqli_real_escape_string($db,$id);
+		
+		
 		$sqlAdd = "insert into ReviewsTable (FoodItemID, Review, Rating, PostedByUserID) values ('$foodID', '$review', '$rating', '$id')";
 
 		$result = mysqli_query($db,$sqlAdd);
