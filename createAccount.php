@@ -17,11 +17,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	$myfirst = mysqli_real_escape_string($db,$_POST['first']);
 	$mylast = mysqli_real_escape_string($db,$_POST['last']);
 	$mychef = mysqli_real_escape_string($db,$_POST['chef']);
-
+	
+	$require = strlen($mypassword);
       
-	if($mypassword == $mypassword2)
+	if($mypassword == $mypassword2 && $require >= 7 )
 	{
-		echo "passwords match";
+		echo "passwords match and length requirement is met";
 		
 		if($mychef == "on")
 		{
@@ -31,7 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 		{
 			$mychef = 0;
 		}
-	        $sql3 = "INSERT INTO UsersTable (Email, Password, PhoneNumber, StreetAddress, City, ZIPCode, State, LoggedIn, IsChef, FirstName, Lastname) Values ('$myemail', '$mypassword', '$myphone', '$mystreet', '$mycity', '$myzip', '$mystate', '0', '$mychef', '$myfirst', '$mylast')";
+	        $sql3 = "INSERT INTO UsersTable (Email, Password, PhoneNumber, StreetAddress, City, ZIPCode, State, LoggedIn, IsChef, FirstName, Lastname) Values ('$myemail', PASSWORD('$mypassword'), '$myphone', '$mystreet', '$mycity', '$myzip', '$mystate', '0', '$mychef', '$myfirst', '$mylast')";
 
       		$result3 = mysqli_query($db,$sql3);	
 		header("location: login.php");
@@ -39,9 +40,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
 
 	}
-	else
+	else if($mypassword != $mypassword2)
 	{
 		echo "passwords don't match";
+	}
+	else if($require < 7)
+	{
+		echo "Password must be at least 8 characters long";
+	}
+	else
+	{
+		echo "Some awful error has occured";
 	}
 	
 
@@ -57,14 +66,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 <!DOCTYPE html>
 <html>
 
+	<head>
+	<link rel="stylesheet" href="cookEatInStyle.css">
+	</head>
+	<body>
+	<!-- title -->
+	<h1 class="title">Cook/Eat In</h1>
+
+	<!-- navbar -->
+	<ul class="navbar">
+	  <li><a href="main.php">Home</a></li>
+	  <li><a href="#"></a></li>
+	  <li><a href="findFood.php">Find Food</a></li>
+	<li><a href="cart.php">Cart</a></li>
+	<li><a href="mykitchen.php">My Kitchen</a></li>
+	  <li style="float:right"><a href="#"></a></li>
+	</ul>
+
+
+<br>
+<div>
+	<h2 class="heading"> Create your Account </h2>
+</div>
 
 
 
 
-
-
-	<h1>-----------------------------Joseph's Test create account----------------------------</h1>
-	<form action = "" method = "post">
+	<form style="text-align:center" action = "" method = "post">
 		<label>Email  :</label><br><input type = "text" name = "email"><br><br>
 		<label>Password  :</label><br><input type = "password" name = "password"><br><br>
 		<label>Repeat Password:</label><br><input type="password" name="password2"><br><br>
@@ -76,29 +104,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 		<label>Last Name</label><br><input type="text" name="last"><br><br>
 		<label>Phone</label><br><input type="text" name="phone"><br><br>
 		<label>I will be a Chef</label><input type="checkbox" name="chef"><br><br>
-<input type = "submit" value = " Create Account "/><br />
+		<input type = "submit" value = " Create Account "/><br />
 	</form>
-	<h1>-----------------------------Joseph's Test create account----------------------------</h1>
 
 
 
 
 
 
-<head>
-  <link rel="stylesheet" href="cookEatInStyle.css">
-</head>
-<body>
-<!-- title -->
-<h1 class="title">Cook/Eat In</h1>
 
-<!-- navbar -->
-<ul class="navbar">
-  <li><a href="cookEatInMain.html">Home</a></li>
-  <li><a href="#"></a></li>
-  <li><a href="">Find Food</a></li>
-  <li style="float:right"><a href="#"></a></li>
-</ul>
+
+
 
 
 <!-- MAIN PAGE -->
@@ -108,23 +124,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
 
 <!-- site description -->
+<!--
 <br>
 <div>
 	<h2 class="heading"> Create your Account </h2>
 </div>
 
 <form style="text-align:center" action="/action_page.php">
-  <label for="username">Username:</label><br>
+-->
+<!--  <label for="username">Username:</label><br>
   <input type="text" id="username" name="username"><br><br>
-  
+--> 
+<!--
+  <label for="email">Email</label><br>
+  <input type="text" id="email" name="email"><br><br>
+
   <label for="pwd">Password:</label><br>
   <input type="password" id="pwd" name="pwd"><br><br>
   
   <label for="rePwd">Repeat Password:</label><br>
   <input type="password" id="rePwd" name="rePwd"><br><br>
-  
-  <label for="email">Email</label><br>
-  <input type="text" id="email" name="email"><br><br>
   
   <label for="city">Location (city)</label><br>
   <input type="text" id="city" name="city"><br><br>
@@ -139,16 +158,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
   <input type="checkbox" id="chef" name="chef" value="chef">
   
   <!--<input type="submit" value="Login"><br><br>
-  <input type="button" id="loginButton" value="Login"> -->
+  <input type="button" id="loginButton" value="Login">
 </form>
 
 <br>
+-->
 <!-- find food button -->
+<!--
 <div style="text-align:center">
 <button class="normal hover" onclick=""> Create Account </button>
 </div>
 
-
+-->
 
 </body>
 

@@ -11,7 +11,7 @@
       $myusername = mysqli_real_escape_string($db,$_POST['username']);
       $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
       
-      $sql = "SELECT UserID FROM UsersTable WHERE Email = '$myusername' and Password = '$mypassword'";
+      $sql = "SELECT UserID FROM UsersTable WHERE Email = '$myusername' and Password = PASSWORD('$mypassword')";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       //$active = $row['active'];
@@ -19,8 +19,10 @@
       $count = mysqli_num_rows($result);
       
       // If result matched $myusername and $mypassword, table row must be 1 row
-		
-      if($count == 1) 
+	
+      $require = strlen($password);
+echo $require;
+      if($count == 1 && $require >= 7) 
 	{
          //session_register("myusername");
          //$_SESSION['login_user'] = $myusername;
@@ -55,12 +57,17 @@
 	//echo $_SESSION['userID']. "  ";
 	//echo $_SESSION['isChef']. "  ";
          header("location: main.php");
-      }
-	else 
-	{
+        }
+      else if ($require < 7)
+      {
          //$error = "Your Login Name or Password is invalid";
-	echo "no match";
+          echo "password not long enough";
       }
+      else
+      {
+	echo "No match";
+      }
+
    }
 ?>
 
@@ -116,17 +123,18 @@
   <input type="text" id="username" name="username" class="box"><br>
   <label for="pwd">Password:</label><br>
   <input type="password" id="pwd" name="password" class="box"><br><br>
-  <input type = "submit" value = " Submit "/><br />
+  <input type = "submit" value = " Login "/><br />
   <!--<input type="submit" value="Login"><br><br>
   <input type="button" id="loginButton" value="Login"> -->
 </form>
 
 
 <br>
-<!-- login button -->
+<!-- login button
 <div style="text-align:center">
 	<button class="normal hover" onclick=""> Login </button>
 </div>
+-->
 <div style="text-align:center">
 	<a href="createAccount.php">Create Account</a>
 </div>

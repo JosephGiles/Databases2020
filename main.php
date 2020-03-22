@@ -7,7 +7,12 @@
 	}
 ?>
 
-
+<!--
+Hash Passwords
+Sanitize all string inputs
+Add more checks and triggers (Ex. user must add full credit card number)
+logout
+-->
 
 
 
@@ -106,7 +111,7 @@ People that sign up to cook home made food can make some good money on the side.
 <br>
 <!-- find food button -->
 <div style="text-align:center">
-<button class="normal hover" onclick="findFood.html"> Find Food </button>
+<button class="normal hover" onclick="findFood.php"> Find Food </button>
 </div>
 
 
