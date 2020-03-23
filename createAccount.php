@@ -23,7 +23,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	if($mypassword == $mypassword2 && $require >= 7 )
 	{
 		echo "passwords match and length requirement is met";
-		
+		$hash = PASSWORD_HASH($mypassword, PASSWORD_DEFAULT);		
+
 		if($mychef == "on")
 		{
 			$mychef = 1;
@@ -32,10 +33,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 		{
 			$mychef = 0;
 		}
-	        $sql3 = "INSERT INTO UsersTable (Email, Password, PhoneNumber, StreetAddress, City, ZIPCode, State, LoggedIn, IsChef, FirstName, Lastname) Values ('$myemail', PASSWORD('$mypassword'), '$myphone', '$mystreet', '$mycity', '$myzip', '$mystate', '0', '$mychef', '$myfirst', '$mylast')";
+	        $sql3 = "INSERT INTO UsersTable (Email, Password, PhoneNumber, StreetAddress, City, ZIPCode, State, LoggedIn, IsChef, FirstName, Lastname) Values ('$myemail', '$hash', '$myphone', '$mystreet', '$mycity', '$myzip', '$mystate', '0', '$mychef', '$myfirst', '$mylast')";
 
-      		$result3 = mysqli_query($db,$sql3);	
-		header("location: login.php");
+      		$result3 = mysqli_query($db,$sql3);
+			
+		//header("location: login.php");
 
 
 
