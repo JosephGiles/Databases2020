@@ -7,6 +7,9 @@
 	$sql6 = "update UsersTable set LoggedIn = 0 Where Email = '$myusername'";
 	$result6 = mysqli_query($db,$sql6);
 
+	session_destroy();
+	echo $_SESSION['username'];
+
 
 
 

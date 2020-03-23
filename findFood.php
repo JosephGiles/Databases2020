@@ -409,6 +409,20 @@ function myFunction() {
 		$foodID = $_POST['reviewFoodID'];
 		$foodID = mysqli_real_escape_string($db,$foodID);
 		//echo $foodID;
+
+		$sqlAverage = "Select Name, FoodItemID, NumberOfReviews, AverageRatings from FoodItemsTable where FoodItemID = '$foodID'";
+		$resultAverage = mysqli_query($db,$sqlAverage);
+		if($resultAverage->num_rows == 1)
+		{
+			while($row = $resultAverage->fetch_assoc())
+			{
+				echo $row['Name'].", FoodID: ". $row['FoodItemID']. "<br>";
+				echo "Average Rating: " . $row['AverageRatings'] . "/5". "<br>";
+				echo "Number of ratings: " . $row['NumberOfReviews'] . "<br><br>";
+			}
+		}
+		
+
 		$sqlReview = "Select * from ReviewsTable inner join UsersTable on ReviewsTable.PostedByUserID = UsersTable.UserID where FoodItemID = '$foodID'";
 
 		$result = mysqli_query($db,$sqlReview);
@@ -457,7 +471,29 @@ function myFunction() {
 		$sqlAdd = "insert into ReviewsTable (FoodItemID, Review, Rating, PostedByUserID) values ('$foodID', '$review', '$rating', '$id')";
 
 		$result = mysqli_query($db,$sqlAdd);
-		echo "Review added!";
+		echo "Review added!"."<br>";
+
+		$sql1= "select * from ReviewsTable where FoodItemID = '$foodID'";
+		$result2 = mysqli_query($db,$sql1);
+		if($result2->num_rows > 0)
+		{
+			$count = 0;
+			$ratingSum = 0;
+			while($row = $result2->fetch_assoc())
+			{
+				//echo $row['Rating'] ."<br>";
+				$ratingSum = $row['Rating'] + $ratingSum;
+				$count = $count + 1;
+			}
+
+			$averageRating = $ratingSum / $count;
+			//echo "average rating: " . $averageRating;
+			
+			
+			$sqlUpdate = "UPDATE FoodItemsTable SET NumberOfReviews = '$count', AverageRatings = '$averageRating' WHERE FoodItemID = '$foodID'";
+			$resultUpdate = mysqli_query($db,$sqlUpdate);
+						
+		}
 		
 	}
 

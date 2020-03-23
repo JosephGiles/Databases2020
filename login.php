@@ -11,18 +11,50 @@
       $myusername = mysqli_real_escape_string($db,$_POST['username']);
       $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
       
-      $sql = "SELECT UserID FROM UsersTable WHERE Email = '$myusername' and Password = PASSWORD('$mypassword')";
+	//$hash = PASSWORD_HASH($mypassword, PASSWORD_DEFAULT);
+	
+//	if(password_verify($mypassword, $hash))
+//	{
+//		echo "Password works";
+//	}
+//	else
+//	{
+//		echo "Password does not work";
+//	}
+		
+//echo $hash;
+
+      $sql = "SELECT * FROM UsersTable WHERE Email = '$myusername'";
       $result = mysqli_query($db,$sql);
-      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      //$row = mysqli_fetch_array($result,MYSQLI_ASSOC);
       //$active = $row['active'];
+	if($result->num_rows == 1)
+	{
+		while($row = $result->fetch_assoc())
+		{
+			$hash = $row['Password'];
+			if(password_verify($mypassword, $hash))
+			{
+				echo "Password works";
+				$goodPassword = true;
+			}
+			else
+			{
+				echo "Password does not work";
+				$goodPassword = false;
+			}
+		}
+
+	}
       
+
       $count = mysqli_num_rows($result);
       
       // If result matched $myusername and $mypassword, table row must be 1 row
 	
       $require = strlen($password);
 echo $require;
-      if($count == 1 && $require >= 7) 
+      if($count == 1 && $require >= 7 && $goodPassword == true) 
 	{
          //session_register("myusername");
          //$_SESSION['login_user'] = $myusername;
