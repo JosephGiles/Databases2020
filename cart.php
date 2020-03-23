@@ -109,24 +109,37 @@
 		$code = $_POST['secCode'];
 		$id = $_SESSION['userID'];
 		
+		$card = mysqli_real_escape_string($db,$card);
+		$month = mysqli_real_escape_string($db,$month);
+		$year = mysqli_real_escape_string($db,$year);
+		$code = mysqli_real_escape_string($db,$code);
 
+		$testCard = (int)$card;
+		$testMonth = (int)$month;
+		$testYear = (int)$year;
+		$testCode = (int)$code;
+		//echo $test ."<br>";
+		if(strlen($card) == 16 && strlen($month) == 2 && strlen($year) == 3 && strlen($code) == 3 && $testCard != 0 && $testMonth != 0 && $testYear != 0 && $testCode != 0)
+		{
+			echo "Order has been submitted to the Chef!";
+			$correctFormat = true;
+		}
+		else
+		{
+			echo "INVALID CARD INFORMATION";
+			$correctFormat = false;
+		}
 		
+		if($correctFormat == true)
+		{
+			$insertSQL = "insert into PaymentMethodTable (CardNumber, ExpirationMonth, ExpirationYear, SecurityCode, UserID) values ('$card', '$month', '$year', '$code', '$id')";
+			$result12 = mysqli_query($db,$insertSQL);
+			echo "Payment submitted";
 
-
-
-
-
-
-
-		$insertSQL = "insert into PaymentMethodTable (CardNumber, ExpirationMonth, ExpirationYear, SecurityCode, UserID) values ('$card', '$month', '$year', '$code', '$id')";
-		$result12 = mysqli_query($db,$insertSQL);
-		echo "Payment submitted";
-
-		$id = $_SESSION['userID'];
-		//$sql9 = "delete from OrdersTable where UserID = '$id' ";
-		$sql9 = "update OrdersTable set Submitted = 1 where UserID = '$id' ";
-		$result = mysqli_query($db,$sql9);
-				
+			$id = $_SESSION['userID'];
+			$sql9 = "update OrdersTable set Submitted = 1 where UserID = '$id' ";
+			$result = mysqli_query($db,$sql9);
+		}
 	}
 
 ?>
